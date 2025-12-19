@@ -2,15 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  // GitHub Pages用の静的エクスポート設定
-  output: 'export',
-  basePath: '/vcbar-app',
-  assetPrefix: '/vcbar-app/',
-
-  // 画像最適化（静的エクスポート用）
+  // 画像最適化
   images: {
-    unoptimized: true,
     domains: ['firebasestorage.googleapis.com'],
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
   // コンパイル最適化
