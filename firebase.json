@@ -1,0 +1,15 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "storage": [
+    {
+      "bucket": "vcbar-app-2025.firebasestorage.app",
+      "rules": "storage.rules"
+    }
+  ]
+}

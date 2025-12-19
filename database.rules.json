@@ -1,0 +1,19 @@
+{
+  "rules": {
+    "presence_realtime": {
+      ".read": "auth != null",
+      "$userId": {
+        ".write": "auth != null && auth.uid == $userId",
+        "userId": {
+          ".validate": "newData.isString() && newData.val() == $userId"
+        },
+        "isPresent": {
+          ".validate": "newData.isBoolean()"
+        },
+        "lastSeen": {
+          ".validate": "newData.hasChildren() || newData.isNumber()"
+        }
+      }
+    }
+  }
+}

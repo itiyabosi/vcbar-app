@@ -1,0 +1,30 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // プロフィール画像
+    match /profile_images/{userId}/{fileName} {
+      // ログイン済みユーザーのみ読み取り可
+      allow read: if request.auth != null;
+
+      // 本人のみアップロード可
+      allow write: if request.auth.uid == userId
+                   && request.resource.size < 5 * 1024 * 1024  // 5MB制限
+                   && request.resource.contentType.matches('image/.*'); // 画像のみ
+
+      // 本人のみ削除可
+      allow delete: if request.auth.uid == userId;
+    }
+
+    // イベント画像（Phase 2）
+    match /event_images/{eventId}/{fileName} {
+      // 全員読み取り可
+      allow read: if true;
+
+      // ログイン済みユーザーのみアップロード可
+      allow write: if request.auth != null
+                   && request.resource.size < 10 * 1024 * 1024  // 10MB制限
+                   && request.resource.contentType.matches('image/.*');
+    }
+  }
+}

@@ -1,0 +1,148 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ヘルパー関数
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['userId', 'email', 'name', 'role', 'organization'])
+        && data.userId is string
+        && data.email is string
+        && data.name is string
+        && data.role in ['VC', 'Student', 'Entrepreneur', 'Mentor', 'Other']
+        && data.organization is string;
+    }
+
+    // ユーザープロフィール
+    match /users/{userId} {
+      // ログイン済みユーザーのみ読み取り可
+      allow read: if isAuthenticated();
+
+      // 本人のみ作成・更新可
+      allow create: if isAuthenticated()
+                    && isOwner(userId)
+                    && isValidUser(request.resource.data)
+                    && request.resource.data.userId == request.auth.uid;
+
+      allow update: if isOwner(userId)
+                    && request.resource.data.userId == resource.data.userId; // ユーザーIDの変更不可
+
+      // 本人のみ削除可
+      allow delete: if isOwner(userId);
+    }
+
+    // 在館状態
+    match /presence/{userId} {
+      // ログイン済みユーザーのみ読み取り可
+      allow read: if isAuthenticated();
+
+      // 本人のみ書き込み可
+      allow write: if isOwner(userId);
+    }
+
+    // イベント（Phase 2）
+    match /events/{eventId} {
+      // ログイン済みユーザーのみ読み取り可
+      allow read: if isAuthenticated();
+
+      // ログイン済みユーザーは作成可
+      allow create: if isAuthenticated();
+
+      // イベント作成者のみ更新・削除可
+      allow update, delete: if isAuthenticated()
+                            && resource.data.organizerId == request.auth.uid;
+    }
+
+    // コネクション
+    match /connections/{connectionId} {
+      // ログイン済みユーザーのみ読み取り可
+      allow read: if isAuthenticated();
+
+      // ログイン済みユーザーは作成可
+      allow create: if isAuthenticated()
+                    && (request.resource.data.userIdA == request.auth.uid
+                        || request.resource.data.userIdB == request.auth.uid);
+
+      // 関係者のみ更新・削除可
+      allow update, delete: if isAuthenticated()
+                            && (resource.data.userIdA == request.auth.uid
+                                || resource.data.userIdB == request.auth.uid);
+    }
+
+    // メニュー
+    match /menu/{itemId} {
+      // 全員が読み取り可
+      allow read: if isAuthenticated();
+
+      // ログイン済みユーザーは作成・更新・削除可（管理機能）
+      allow write: if isAuthenticated();
+    }
+
+    // 注文
+    match /orders/{orderId} {
+      // 自分の注文のみ読み取り可
+      allow read: if isAuthenticated()
+                  && resource.data.userId == request.auth.uid;
+
+      // ログイン済みユーザーは注文作成可
+      allow create: if isAuthenticated()
+                    && request.resource.data.userId == request.auth.uid;
+
+      // 自分の注文のみ更新可（キャンセルなど）
+      allow update: if isAuthenticated()
+                    && resource.data.userId == request.auth.uid;
+
+      // 削除は不可
+      allow delete: if false;
+    }
+
+    // テーブルセッション
+    match /tableSessions/{sessionId} {
+      // ログイン済みユーザーのみ読み取り可
+      allow read: if isAuthenticated();
+
+      // ログイン済みユーザーは参加可
+      allow create: if isAuthenticated()
+                    && request.resource.data.userId == request.auth.uid;
+
+      // 自分のセッションのみ更新可
+      allow update: if isAuthenticated()
+                    && resource.data.userId == request.auth.uid;
+
+      // 削除は不可
+      allow delete: if false;
+    }
+
+    // メッセージ（Phase 2）
+    match /messages/{conversationId}/messages/{messageId} {
+      // 会話の参加者のみ読み取り可
+      allow read: if isAuthenticated();
+
+      // 送信者のみ作成可
+      allow create: if isAuthenticated()
+                    && request.resource.data.senderId == request.auth.uid;
+
+      // 更新・削除は不可（メッセージは編集不可）
+      allow update, delete: if false;
+    }
+
+    // 事前登録
+    match /preRegistrations/{registrationId} {
+      // 誰でも作成可（未認証でもOK）
+      allow create: if true;
+
+      // 読み取りは認証済みユーザーのみ
+      allow read: if isAuthenticated();
+
+      // 更新・削除は不可
+      allow update, delete: if false;
+    }
+  }
+}

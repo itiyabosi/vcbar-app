@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #1E3A8A;
+  --accent: #F97316;
+  --success: #10B981;
+  --background: #1F2937;
+  --foreground: #F9FAFB;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* スクロールバーを非表示 */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* スムーズスクロール */
+html {
+  scroll-behavior: smooth;
+}
+
+/* パフォーマンス最適化: アニメーションの最適化 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* タッチデバイスでのタップハイライト無効化 */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* フォーカス時のアウトライン改善（アクセシビリティ） */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
