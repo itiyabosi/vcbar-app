@@ -204,11 +204,14 @@ export default function AuthPage() {
             {/* 右側: 事前登録フォーム */}
             <div>
               <div className="text-center mb-6">
+                <div className="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                  🎉 2025.02.11 Grand Opening Preview
+                </div>
                 <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
                   事前登録受付中
                 </h2>
                 <p className="text-gray-300">
-                  サービス開始時に優先的にご案内します
+                  招待制プレビューへ優先的にご案内します
                 </p>
               </div>
 
