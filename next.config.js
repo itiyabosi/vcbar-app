@@ -2,10 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  // GitHub Pages用の静的エクスポート設定
+  // GitHub Pages用の静的エクスポート設定（本番のみ）
   output: 'export',
-  basePath: '/vcbar-app',
-  assetPrefix: '/vcbar-app/',
+  basePath: process.env.NODE_ENV === 'production' ? '/vcbar-app' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/vcbar-app/' : '',
 
   // 画像最適化（静的エクスポート用）
   images: {
