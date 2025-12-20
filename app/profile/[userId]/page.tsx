@@ -6,6 +6,7 @@ import { auth, db, realtimeDb } from '@/lib/firebase/config';
 import { doc, getDoc, addDoc, collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
 import { ref, onValue } from 'firebase/database';
 import type { User } from '@/lib/types/user';
+import type { Connection } from '@/lib/types/connection';
 
 export default function ProfileDetailPage() {
   const router = useRouter();
