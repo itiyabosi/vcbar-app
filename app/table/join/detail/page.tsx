@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { auth, db } from '@/lib/firebase/config';
 import {
   collection,
@@ -19,8 +19,8 @@ import type { User, TableSession } from '@/lib/types/user';
 
 export default function TableJoinPage() {
   const router = useRouter();
-  const params = useParams();
-  const tableId = params.tableId as string;
+  const searchParams = useSearchParams();
+  const tableId = searchParams.get('tableId') || '';
 
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [tableSessions, setTableSessions] = useState<Array<TableSession & { user: User }>>([]);
@@ -266,7 +266,7 @@ export default function TableJoinPage() {
                 <div
                   key={session.userId}
                   className="flex items-center gap-4 bg-gray-700/50 rounded-lg p-4 cursor-pointer hover:bg-gray-700"
-                  onClick={() => router.push(`/profile/${session.userId}`)}
+                  onClick={() => router.push(`/profile/detail?userId=${session.userId}`)}
                 >
                   {session.user.photoURL ? (
                     <img

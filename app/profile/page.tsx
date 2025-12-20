@@ -404,7 +404,7 @@ export default function MyPage() {
                 <div
                   key={connection.connectionId}
                   className="bg-gray-700/50 rounded-lg p-4 hover:bg-gray-700 transition cursor-pointer"
-                  onClick={() => router.push(`/profile/${connection.otherUser.userId}`)}
+                  onClick={() => router.push(`/profile/detail?userId=${connection.otherUser.userId}`)}
                 >
                   <div className="flex items-start gap-4">
                     {/* プロフィール画像 */}

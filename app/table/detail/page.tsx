@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { db } from '@/lib/firebase/config';
 import {
   collection,
@@ -15,8 +15,8 @@ import type { User, TableSession } from '@/lib/types/user';
 import QRCode from 'qrcode';
 
 export default function TableDisplayPage() {
-  const params = useParams();
-  const tableId = params.tableId as string;
+  const searchParams = useSearchParams();
+  const tableId = searchParams.get('tableId') || '';
   const tableName = `テーブル ${tableId.split('-')[1] || tableId}`;
 
   const [tableSessions, setTableSessions] = useState<Array<TableSession & { user: User }>>([]);
@@ -24,7 +24,7 @@ export default function TableDisplayPage() {
 
   // QRコードを生成
   useEffect(() => {
-    const joinUrl = `${window.location.origin}/table/join/${tableId}`;
+    const joinUrl = `${window.location.origin}/table/join/detail?tableId=${tableId}`;
     QRCode.toDataURL(joinUrl, {
       width: 400,
       margin: 2,
@@ -132,7 +132,7 @@ export default function TableDisplayPage() {
               <div className="pt-4 border-t border-gray-700 mt-6">
                 <p className="text-sm text-gray-500 mb-2">または直接アクセス</p>
                 <code className="text-xs text-primary bg-gray-900/50 px-3 py-2 rounded">
-                  {typeof window !== 'undefined' && `${window.location.origin}/table/join/${tableId}`}
+                  {typeof window !== 'undefined' && `${window.location.origin}/table/join/detail?tableId=${tableId}`}
                 </code>
               </div>
             </div>

@@ -167,7 +167,7 @@ export default function EditProfilePage() {
       await updateDoc(doc(db, 'users', auth.currentUser.uid), updates);
 
       console.log('[SUCCESS] プロフィール更新成功');
-      router.push(`/profile/${auth.currentUser.uid}`);
+      router.push('/profile');
     } catch (err: any) {
       console.error('[ERROR] プロフィール更新エラー:', err);
       setError('プロフィール更新に失敗しました');
@@ -191,7 +191,7 @@ export default function EditProfilePage() {
         {/* 戻るボタン */}
         <div className="mb-6">
           <button
-            onClick={() => router.push(`/profile/${auth.currentUser?.uid}`)}
+            onClick={() => router.push('/profile')}
             className="text-gray-400 hover:text-white flex items-center gap-2"
           >
             ← 戻る
@@ -378,7 +378,7 @@ export default function EditProfilePage() {
             <div className="flex gap-4">
               <button
                 type="button"
-                onClick={() => router.push(`/profile/${auth.currentUser?.uid}`)}
+                onClick={() => router.push('/profile')}
                 className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded transition"
               >
                 キャンセル

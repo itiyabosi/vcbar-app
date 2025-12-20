@@ -33,10 +33,10 @@ export default function TableSelectPage() {
   const handleTableSelect = (tableId: string) => {
     if (mode === 'display') {
       // 卓上常設ディスプレイモード
-      router.push(`/table/${tableId}`);
+      router.push(`/table/detail?tableId=${tableId}`);
     } else {
       // ユーザー参加モード
-      router.push(`/table/join/${tableId}`);
+      router.push(`/table/join/detail?tableId=${tableId}`);
     }
   };
 

@@ -383,7 +383,7 @@ export default function HomePage() {
                 <div
                   key={user.userId}
                   className="bg-gray-800 rounded-lg p-6 hover:bg-gray-750 transition cursor-pointer"
-                  onClick={() => router.push(`/profile/${user.userId}`)}
+                  onClick={() => router.push(`/profile/detail?userId=${user.userId}`)}
                 >
                   <div className="flex items-start gap-4">
                     {user.photoURL ? (

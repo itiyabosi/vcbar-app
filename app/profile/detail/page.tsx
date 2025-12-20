@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { auth, db, realtimeDb } from '@/lib/firebase/config';
 import { doc, getDoc, addDoc, collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
 import { ref, onValue } from 'firebase/database';
@@ -10,8 +10,8 @@ import type { Connection } from '@/lib/types/connection';
 
 export default function ProfileDetailPage() {
   const router = useRouter();
-  const params = useParams();
-  const userId = params.userId as string;
+  const searchParams = useSearchParams();
+  const userId = searchParams.get('userId') || '';
 
   const [user, setUser] = useState<User | null>(null);
   const [isPresent, setIsPresent] = useState(false);
